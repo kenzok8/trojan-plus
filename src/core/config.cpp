@@ -400,7 +400,7 @@ void Config::prepare_ssl_context(boost::asio::ssl::context& ssl_context, string&
     _guard;
     auto* native_context = ssl_context.native_handle();
     ssl_context.set_options(
-      context::default_workarounds | context::no_sslv2 | context::no_sslv3 | context::single_dh_use);
+      context::default_workarounds | context::no_sslv2 | context::no_sslv3 | context::no_tlsv1 | context::no_tlsv1_1 | context::single_dh_use);
     if (!ssl.curves.empty()) {
         SSL_CTX_set1_curves_list(native_context, ssl.curves.c_str());
     }
