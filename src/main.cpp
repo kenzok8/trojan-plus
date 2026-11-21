@@ -162,6 +162,11 @@ int main(int argc, const char* argv[]) {
 
             if (test) {
                 Log::log("The config file looks good.", Log::OFF);
+                // Destroy the service before exit(): ~Service() logs via
+                // Log::log_with_date_time(), whose function-local statics are
+                // destroyed before the static g_service on exit, so leaving
+                // g_service to static destruction segfaults there.
+                g_service.reset();
                 exit(EXIT_SUCCESS);
             }
             signal_set sig(g_service->get_io_context());

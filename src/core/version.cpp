@@ -23,6 +23,6 @@
 #include "version.h"
 using namespace std;
 
-const string Version::version("10.0.6");
+const string Version::version("10.0.7");
 
 string Version::get_version() { return version; }

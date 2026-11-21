@@ -156,14 +156,16 @@ find_package(Threads REQUIRED)
 target_link_libraries(trojan ${CMAKE_THREAD_LIBS_INIT})
 
 # https://github.com/microsoft/GSL supported
-#find_package(Microsoft.GSL CONFIG REQUIRED)
+# Prefer a system-installed GSL (e.g. libmsgsl-dev on Debian/Ubuntu); fall back to
+# cloning the pinned revision when none is available.
+find_package(Microsoft.GSL CONFIG QUIET)
 if(${Microsoft.GSL_FOUND})
   message(STATUS "Found the Guidelines Support Library: ${Microsoft.GSL_DIR}")
-  target_link_libraries(trojan INTERFACE Microsoft.GSL::GSL)
+  target_link_libraries(trojan Microsoft.GSL::GSL)
 else()
   set(GSL_URL https://github.com/Microsoft/GSL)
   set(GSL_VERSION 0f6dbc9)
-  message(STATUS "Using and shipping ${GSL_URL} version ${GCL_VERSION}")
+  message(STATUS "Using and shipping ${GSL_URL} version ${GSL_VERSION}")
   set(GSL_DIR ${CMAKE_CURRENT_BINARY_DIR}/external/GSL)
   if(NOT EXISTS ${GSL_DIR})
     execute_process(COMMAND git clone ${GSL_URL} ${GSL_DIR})
